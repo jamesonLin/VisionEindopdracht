@@ -12,10 +12,10 @@ from IPython.display import display, clear_output
 import os
 
 NUM_CLASSES = 3
-TRAINPATH = 'dataset3/train/'
-VALIDPATH = 'dataset3/valid/'
-TESTPATH = 'dataset3/test/'
-NEWPATH = 'dataset3/new/'
+TRAINPATH = 'dataset/train/'
+VALIDPATH = 'dataset/valid/'
+TESTPATH = 'dataset/test/'
+NEWPATH = 'dataset/new/'
 
 def CraeteLabelMap(path):
     annotations = pd.read_csv(path + 'annotation.csv')
@@ -132,10 +132,10 @@ print("Train boxes shape:", augmentedTrainbboxes.shape)
 
 
 def getModel():
-    preModel = Path("softmax.h5")
+    preModel = Path("models/softmax.h5")
     if preModel.is_file():
         # load trained model
-        model = load_model('softmax.h5')
+        model = load_model('models/softmax.h5')
         return model
     else:
         # Define input tensor
@@ -192,7 +192,7 @@ def getModel():
         model.compile(loss=losses, optimizer='adam', metrics=metrics)
         
         # Train the model on the training data and validation on validation data
-        checkpoint = ModelCheckpoint('softmax.h5', monitor='bbox_output_accuracy', save_best_only=True, mode='max', verbose=1)
+        checkpoint = ModelCheckpoint('models/softmax.h5', monitor='bbox_output_accuracy', save_best_only=True, mode='max', verbose=1)
         model.fit(trainImg, trainTargets, epochs=150, batch_size=50, validation_data=(validImg, validTargets), callbacks=[checkpoint])
         # model.fit(augmentedTrainImg, trainTargets, epochs=150, batch_size=16, validation_data=(augmentedValidImg, validTargets), callbacks=[checkpoint])
         
